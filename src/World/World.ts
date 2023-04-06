@@ -5,7 +5,7 @@ import { createRenderer } from './systems/renderer';
 import { createCube } from './components/cube';
 import { Resizer } from './systems/Resizer';
 import { createLights } from './components/lights';
-import { Loop } from './systems/Loop';
+import { Loop, Ticker } from './systems/Loop';
 import { createControls } from './systems/controls';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { createAxesHelper, createGridHelper } from './components/helpers';
@@ -17,9 +17,9 @@ class World {
   private camera: PerspectiveCamera;
   private scene: Scene;
   private renderer: WebGLRenderer;
-  private controls: OrbitControls;
+  private controls: OrbitControls & Ticker;
   private loop: Loop;
-  private stats: Stats;
+  private stats: Stats & Ticker;
 
   constructor(container: HTMLElement) {
     this.container = container;

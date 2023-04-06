@@ -1,6 +1,6 @@
 import { AnimationMixer, Object3D } from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { ObjectWithTick } from '../cube';
+import { withTick } from '../../systems/Loop';
 
 function setupModel(data: GLTF) {
   const model = data.scene.children[0];
@@ -11,10 +11,9 @@ function setupModel(data: GLTF) {
   const action = mixer.clipAction(clip);
   action.play();
 
-  (model as ObjectWithTick<Object3D>).tick = (delta: number) =>
-    mixer.update(delta);
+  const tick = (delta: number) => mixer.update(delta);
 
-  return model;
+  return withTick(model, { tick });
 }
 
 export { setupModel };

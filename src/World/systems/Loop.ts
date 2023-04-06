@@ -1,12 +1,22 @@
 import { Clock, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
 
-const clock = new Clock();
+export interface Ticker {
+  tick: (delta: number) => void;
+}
+
+export function withTick<T extends object>(
+  object: T,
+  ticker: Ticker
+): T & Ticker {
+  return Object.assign(object, { tick: ticker.tick });
+}
 
 class Loop {
   private camera: PerspectiveCamera;
   private scene: Scene;
   private renderer: WebGLRenderer;
-  updatables: any[];
+  private clock: Clock;
+  public updatables: Ticker[];
 
   constructor(
     camera: PerspectiveCamera,
@@ -17,6 +27,7 @@ class Loop {
     this.scene = scene;
     this.renderer = renderer;
     this.updatables = [];
+    this.clock = new Clock();
   }
 
   start() {
@@ -30,8 +41,19 @@ class Loop {
     this.renderer.setAnimationLoop(null);
   }
 
+  add(object: Ticker) {
+    this.updatables.push(object);
+  }
+
+  remove(object: Ticker) {
+    const index = this.updatables.indexOf(object);
+    if (index !== -1) {
+      this.updatables.splice(index, 1);
+    }
+  }
+
   tick() {
-    const delta = clock.getDelta();
+    const delta = this.clock.getDelta();
 
     for (const object of this.updatables) {
       object.tick(delta);

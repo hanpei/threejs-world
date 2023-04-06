@@ -1,6 +1,6 @@
 import { PerspectiveCamera } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { ObjectWithTick } from '../components/cube';
+import { withTick } from './Loop';
 
 function createControls(camera: PerspectiveCamera, canvas: HTMLElement) {
   const controls = new OrbitControls(camera, canvas);
@@ -8,10 +8,10 @@ function createControls(camera: PerspectiveCamera, canvas: HTMLElement) {
 
   // controls.autoRotate = true;
 
-  (controls as ObjectWithTick<OrbitControls>).tick = () => {
+  const tick = () => {
     controls.update();
   };
-  return controls;
+  return withTick(controls, { tick });
 }
 
 export { createControls };

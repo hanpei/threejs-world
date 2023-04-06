@@ -1,12 +1,12 @@
 import Stats from 'three/examples/jsm/libs/stats.module.js';
-import { ObjectWithTick } from './cube';
+import { withTick } from '../systems/Loop';
 
 function createStats() {
   const stats = new Stats();
-  (stats as ObjectWithTick<Stats>).tick = () => {
+  const tick = () => {
     stats.update();
   };
-  return stats;
+  return withTick(stats, { tick });
 }
 
 export { createStats };

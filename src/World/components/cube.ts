@@ -1,14 +1,5 @@
-import {
-  BoxGeometry,
-  MathUtils,
-  Mesh,
-  MeshStandardMaterial,
-  MeshStandardMaterialParameters,
-} from 'three';
-
-export type ObjectWithTick<T> = T & {
-  tick?: (delta: number) => void;
-};
+import { BoxGeometry, MathUtils, Mesh, MeshStandardMaterial } from 'three';
+import { withTick } from '../systems/Loop';
 
 function createCube() {
   const geometry = new BoxGeometry(2, 2, 2);
@@ -19,13 +10,13 @@ function createCube() {
 
   const radiansPerSecond = MathUtils.degToRad(30);
 
-  (cube as ObjectWithTick<Mesh>).tick = (delta: number) => {
+  const tick = (delta: number) => {
     cube.rotation.z += radiansPerSecond * delta;
     cube.rotation.x += radiansPerSecond * delta;
     cube.rotation.y += radiansPerSecond * delta;
   };
 
-  return cube;
+  return withTick(cube, { tick });
 }
 
 export { createCube };

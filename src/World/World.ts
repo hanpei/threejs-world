@@ -10,6 +10,7 @@ import { createControls } from './systems/controls';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { createAxesHelper, createGridHelper } from './components/helpers';
 import { loadBirds } from './components/birds/birds';
+import { createStats } from './components/stats';
 
 class World {
   public container: HTMLElement;
@@ -18,19 +19,23 @@ class World {
   private renderer: WebGLRenderer;
   private controls: OrbitControls;
   private loop: Loop;
+  private stats: Stats;
 
   constructor(container: HTMLElement) {
     this.container = container;
     this.camera = createCamera();
     this.scene = createScene();
     this.renderer = createRenderer();
+    this.stats = createStats();
+
     this.controls = createControls(this.camera, this.renderer.domElement);
     this.loop = new Loop(this.camera, this.scene, this.renderer);
     container.appendChild(this.renderer.domElement);
+    container.appendChild(this.stats.dom);
 
     // const cube = createCube();
     const { ambientLight, mainLight } = createLights();
-    this.loop.updatables.push(this.controls);
+    this.loop.updatables.push(this.controls, this.stats);
     // this.scene.add(cube, ambientLight, mainLight);
     this.scene.add(ambientLight, mainLight);
     this.scene.add(createAxesHelper(10), createGridHelper());

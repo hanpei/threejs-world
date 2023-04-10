@@ -33,11 +33,11 @@ class World {
     container.appendChild(this.renderer.domElement);
     container.appendChild(this.stats.dom);
 
-    // const cube = createCube();
+    const cube = createCube();
     const { ambientLight, mainLight } = createLights();
-    this.loop.updatables.push(this.controls, this.stats);
+    this.loop.updatables.push(cube, this.controls, this.stats);
     // this.scene.add(cube, ambientLight, mainLight);
-    this.scene.add(ambientLight, mainLight);
+    this.scene.add(cube, ambientLight, mainLight);
     this.scene.add(createAxesHelper(10), createGridHelper());
 
     const resizer = new Resizer(container, this.camera, this.renderer);
